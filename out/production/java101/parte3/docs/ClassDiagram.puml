@@ -1,0 +1,42 @@
+@startuml
+
+package parte2 {
+    class Account {
+        - accountNumber : String
+        - accountHolderName : String
+        - balance : double
+        + Account(accountNumber, accountHolderName, initialBalance)
+        + getAccountNumber() : String
+        + getAccountHolderName() : String
+        + getBalance() : double
+        + deposit(amount : double) : void
+        + withdraw(amount : double) : void
+    }
+}
+package parte3 {
+    class Employee {
+        + name : String
+        + type : TypeEmployee
+        + account : Account
+        + Employee(name, type, accountNumber, initialBalance)
+        + getName() : String
+        + getType() : TypeEmployee
+        + getAccount() : Account
+    }
+    enum TypeEmployee {
+        INTERN
+        STAFF
+        MANAGER
+    }
+    class EmployeeManager {
+        + main(args : String[]) : void
+        + depositSalary(employee : Employee) : void
+        + printEmployeeInfo(employee : Employee) : void
+    }
+}
+
+Employee "1" -- "1" Account : tiene
+EmployeeManager ..> Employee : usa
+Employee -- TypeEmployee
+
+@enduml
