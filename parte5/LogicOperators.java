@@ -15,6 +15,7 @@ public class LogicOperators {
         Employee e5 = new Employee("Maria", TypeEmployee.INTERN, "1005", 0.0);
 
         List<Employee> empleados = Arrays.asList(e1, e2, e3, e4, e5);
+        empleados.add(new Employee("Nico", TypeEmployee.INTERN, "1001", 0.0));
 
         Payroll payroll = new Payroll(empleados);
         payroll.processPayroll();
