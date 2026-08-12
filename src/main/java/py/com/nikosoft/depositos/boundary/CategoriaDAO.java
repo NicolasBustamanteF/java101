@@ -135,8 +135,7 @@ public class CategoriaDAO implements DbDaoManager<Categoria, Integer> {
 
     /**
      * ACTUALIZAR (UPDATE) - Actualiza la descripción de una categoría
-     * @param idCategoria el ID de la categoría a actualizar
-     * @param descripcion la nueva descripción
+     * @param categoria el ID de la categoría a actualizar
      * @return true si se actualizó, false si no se encontró
      * @throws SQLException si hay error en la operación
      */
@@ -158,7 +157,7 @@ public class CategoriaDAO implements DbDaoManager<Categoria, Integer> {
                 pstmt.close();
                 return true;
             } else {
-                System.out.println("⚠ Categoría no encontrada (ID: " + idCategoria + ")");
+                System.out.println("⚠ Categoría no encontrada (ID: " + categoria.getIdCategoria() + ")");
                 pstmt.close();
                 return false;
             }
