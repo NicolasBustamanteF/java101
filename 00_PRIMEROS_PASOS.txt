@@ -1,0 +1,144 @@
+🚀 PRIMEROS PASOS - QUÉ HACER AHORA
+===================================
+
+Tienes 3 opciones según tu experiencia:
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1️⃣ SI ERES COMPLETAMENTE NUEVO EN ESTO
+════════════════════════════════════════
+
+Orden de lectura:
+  1. INICIO_RAPIDO.md      ← COMIENZA AQUÍ (10 minutos)
+  2. Instala Maven (paso 1)
+  3. Configura PostgreSQL (paso 2)
+  4. Ejecuta los comandos (paso 3-4)
+  5. Prueba con el ejemplo (paso 4)
+
+Aproximadamente 30-45 minutos para todo listo.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+2️⃣ SI TIENES EXPERIENCIA CON JAVA
+══════════════════════════════════════
+
+Orden de lectura:
+  1. README.md               ← Visión general (5 min)
+  2. Revisar pom.xml         ← Dependencias (2 min)
+  3. Ver ConnectionManager.java
+  4. mvn clean compile
+  5. Listo para usar
+
+Aproximadamente 15 minutos.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+3️⃣ SI YA TIENES MAVEN INSTALADO
+════════════════════════════════════
+
+Solo necesitas:
+
+1. Ejecutar SQL en PostgreSQL:
+   CREATE DATABASE db_depositos;
+   CREATE USER develop WITH PASSWORD 'develop123';
+   GRANT ALL PRIVILEGES ON DATABASE db_depositos TO develop;
+   GRANT USAGE ON SCHEMA public TO develop;
+
+2. En tu terminal:
+   cd C:\Users\nicob\OneDrive\Documentos\repositorio\java101
+   mvn clean compile
+   mvn exec:java -Dexec.mainClass="py.com.nikosoft.utils.ConnectionManagerExample"
+
+Listo en 5 minutos.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 LISTA DE VERIFICACIÓN RÁPIDA
+════════════════════════════════
+
+Antes de empezar, verifica que tienes:
+
+☐ Java 11+ instalado
+  → Comando: java -version
+
+☐ PostgreSQL instalado y ejecutándose
+  → Comando: psql -V
+
+☐ Acceso a pgAdmin o psql
+  → Para ejecutar sentencias SQL
+
+Si tienes ✓ en todos, ya puedes empezar.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚡ LA FORMA MÁS RÁPIDA (15 minutos)
+═════════════════════════════════════
+
+1. Instala Maven:
+   choco install maven -y
+
+2. Configura BD (en PostgreSQL):
+   CREATE DATABASE db_depositos;
+   CREATE USER develop WITH PASSWORD 'develop123';
+   GRANT ALL PRIVILEGES ON DATABASE db_depositos TO develop;
+   GRANT USAGE ON SCHEMA public TO develop;
+
+3. Abre PowerShell y navega al proyecto:
+   cd "C:\Users\nicob\OneDrive\Documentos\repositorio\java101"
+
+4. Compila:
+   mvn clean compile
+
+5. Ejecuta el ejemplo:
+   mvn exec:java -Dexec.mainClass="py.com.nikosoft.utils.ConnectionManagerExample"
+
+Si ves datos en la pantalla ✓ = ÉXITO
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📞 AYUDA SI ALGO FALLA
+════════════════════════
+
+Error: "Maven no está instalado"
+  → Lee: MANUAL_MAVEN_INSTALL.md
+  → O ejecuta: Install-Maven.ps1
+
+Error: "PostgreSQL no se conecta"
+  → Verifica que PostgreSQL está corriendo
+  → Windows: Services → Buscar "PostgreSQL" → Iniciar
+
+Error: "Connection refused"
+  → Verificar que PostgreSQL escucha en localhost:5432
+  → Comando: psql -h localhost
+
+Error: "Usuario o contraseña inválida"
+  → Verifica que creaste el usuario 'develop'
+  → Con contraseña exacta: develop123
+
+Error: "Cannot find symbol"
+  → Ejecuta: mvn clean compile
+  → Espera a que descargue las dependencias
+
+Más detalles en: INDICE.md
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✨ LO QUE TIENES NUEVO
+══════════════════════
+
+✓ pom.xml          - Configuración Maven
+✓ ConnectionManager.java    - Gestor de conexiones
+✓ ConnectionManagerExample.java - Ejemplo listo para ejecutar
+✓ 7 Documentos de guía - Para cualquier duda
+✓ 2 Scripts automáticos - Para instalar Maven
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 SIGUIENTE:
+   ↓
+   Lee: INICIO_RAPIDO.md
+   ↓
+   ¡Sigue los 5 pasos!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+

@@ -2,6 +2,7 @@ package py.com.nikosoft.depositos.boundary;
 
 import py.com.nikosoft.depositos.entities.Categoria;
 import py.com.nikosoft.utils.ConnectionManager;
+import py.com.nikosoft.utils.DbDaoManager;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,9 +13,9 @@ import java.util.List;
  * Implementa operaciones CRUD (Create, Read, Update, Delete)
  * Utiliza ConnectionManager para gestionar conexiones
  */
-public class CategoriaDAO {
+public class CategoriaDAO implements DbDaoManager<Categoria, Integer> {
 
-    private ConnectionManager connectionManager;
+    private final ConnectionManager connectionManager;
 
     /**
      * Constructor del DAO
@@ -27,6 +28,7 @@ public class CategoriaDAO {
      * Crea la tabla CATEGORIA si no existe
      * @throws SQLException si hay error en la operación
      */
+    @Override
     public void createTable() throws SQLException {
         String createTableSQL = "CREATE TABLE IF NOT EXISTS categoria (" +
                 "id_categoria SERIAL PRIMARY KEY, " +
@@ -52,12 +54,13 @@ public class CategoriaDAO {
 
     /**
      * AGREGAR (CREATE) - Inserta una nueva categoría
-     * @param descripcion la descripción de la categoría
+     * @param categoria objeto categoria
      * @return el ID de la categoría creada
      * @throws SQLException si hay error en la operación
      */
-    public int add(String descripcion) throws SQLException {
-        String insertSQL = "INSERT INTO categoria (descripcion) VALUES (?)";
+    @Override
+    public int add(Categoria categoria) throws SQLException {
+        String insertSQL = "INSERT INTO categoria (categoria) VALUES (?)";
 
         Connection connection = null;
         try {
@@ -67,7 +70,7 @@ public class CategoriaDAO {
                     Statement.RETURN_GENERATED_KEYS
             );
 
-            pstmt.setString(1, descripcion);
+            pstmt.setString(1, categoria.getDescripcion());
             int rowsAffected = pstmt.executeUpdate();
 
             if (rowsAffected > 0) {
@@ -98,7 +101,8 @@ public class CategoriaDAO {
      * @return true si se eliminó, false si no se encontró
      * @throws SQLException si hay error en la operación
      */
-    public boolean delete(int idCategoria) throws SQLException {
+    @Override
+    public boolean delete(Integer idCategoria) throws SQLException {
         String deleteSQL = "DELETE FROM categoria WHERE id_categoria = ?";
 
         Connection connection = null;
@@ -136,7 +140,8 @@ public class CategoriaDAO {
      * @return true si se actualizó, false si no se encontró
      * @throws SQLException si hay error en la operación
      */
-    public boolean update(int idCategoria, String descripcion) throws SQLException {
+    @Override
+    public boolean update(Categoria categoria) throws SQLException {
         String updateSQL = "UPDATE categoria SET descripcion = ? WHERE id_categoria = ?";
 
         Connection connection = null;
@@ -144,8 +149,8 @@ public class CategoriaDAO {
             connection = connectionManager.getConnection();
             PreparedStatement pstmt = connection.prepareStatement(updateSQL);
 
-            pstmt.setString(1, descripcion);
-            pstmt.setInt(2, idCategoria);
+            pstmt.setString(1, categoria.getDescripcion());
+            pstmt.setInt(2, categoria.getIdCategoria());
             int rowsAffected = pstmt.executeUpdate();
 
             if (rowsAffected > 0) {
@@ -173,7 +178,8 @@ public class CategoriaDAO {
      * @return lista de todas las categorías
      * @throws SQLException si hay error en la operación
      */
-    public List<Categoria> select() throws SQLException {
+    @Override
+    public List<Categoria> getAll() throws SQLException {
         List<Categoria> categorias = new ArrayList<>();
         String selectSQL = "SELECT id_categoria, descripcion FROM categoria ORDER BY id_categoria";
 
@@ -212,7 +218,8 @@ public class CategoriaDAO {
      * @return la categoría encontrada o null si no existe
      * @throws SQLException si hay error en la operación
      */
-    public Categoria selectById(int idCategoria) throws SQLException {
+    @Override
+    public Categoria getById(Integer idCategoria) throws SQLException {
         String selectSQL = "SELECT id_categoria, descripcion FROM categoria WHERE id_categoria = ?";
 
         Connection connection = null;
@@ -247,6 +254,8 @@ public class CategoriaDAO {
         }
     }
 
+
+
     /**
      * SELECCIONAR POR DESCRIPCIÓN (READ BY DESCRIPTION - LIKE)
      * Busca categorías cuya descripción contenga el texto especificado
@@ -254,41 +263,41 @@ public class CategoriaDAO {
      * @return lista de categorías que coinciden con la búsqueda
      * @throws SQLException si hay error en la operación
      */
-    public List<Categoria> selectByDescripcion(String descripcion) throws SQLException {
-        List<Categoria> categorias = new ArrayList<>();
-        String selectSQL = "SELECT id_categoria, descripcion FROM categoria " +
-                          "WHERE descripcion ILIKE ? " +
-                          "ORDER BY id_categoria";
+    public List<Categoria> getByDescripcion(String descripcion) throws SQLException {
+            List<Categoria> categorias = new ArrayList<>();
+            String selectSQL = "SELECT id_categoria, descripcion FROM categoria " +
+                    "WHERE descripcion ILIKE ? " +
+                    "ORDER BY id_categoria";
 
-        Connection connection = null;
-        try {
-            connection = connectionManager.getConnection();
-            PreparedStatement pstmt = connection.prepareStatement(selectSQL);
+            Connection connection = null;
+            try {
+                connection = connectionManager.getConnection();
+                PreparedStatement pstmt = connection.prepareStatement(selectSQL);
 
-            // Agregar % para búsqueda LIKE (funciona en PostgreSQL)
-            pstmt.setString(1, "%" + descripcion + "%");
-            ResultSet resultSet = pstmt.executeQuery();
+                // Agregar % para búsqueda LIKE (funciona en PostgreSQL)
+                pstmt.setString(1, "%" + descripcion + "%");
+                ResultSet resultSet = pstmt.executeQuery();
 
-            while (resultSet.next()) {
-                int idCategoria = resultSet.getInt("id_categoria");
-                String desc = resultSet.getString("descripcion");
+                while (resultSet.next()) {
+                    int idCategoria = resultSet.getInt("id_categoria");
+                    String desc = resultSet.getString("descripcion");
 
-                Categoria categoria = new Categoria(idCategoria, desc);
-                categorias.add(categoria);
+                    Categoria categoria = new Categoria(idCategoria, desc);
+                    categorias.add(categoria);
+                }
+
+                System.out.println("✓ Se encontraron " + categorias.size() + " categorías con: \"" + descripcion + "\"");
+                pstmt.close();
+                return categorias;
+
+            } catch (SQLException e) {
+                System.err.println("✗ Error al consultar categorías por descripción: " + e.getMessage());
+                throw e;
+            } finally {
+                if (connection != null) {
+                    connectionManager.closeConnection(connection);
+                }
             }
-
-            System.out.println("✓ Se encontraron " + categorias.size() + " categorías con: \"" + descripcion + "\"");
-            pstmt.close();
-            return categorias;
-
-        } catch (SQLException e) {
-            System.err.println("✗ Error al consultar categorías por descripción: " + e.getMessage());
-            throw e;
-        } finally {
-            if (connection != null) {
-                connectionManager.closeConnection(connection);
-            }
-        }
     }
 
     /**

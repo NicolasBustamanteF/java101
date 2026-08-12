@@ -1,0 +1,196 @@
+📦 RESUMEN DE CAMBIOS - ConnectionManager + Maven
+================================================
+
+✅ ARCHIVOS CREADOS:
+═══════════════════
+
+1. 📄 pom.xml
+   - Configuración Maven para el proyecto
+   - Incluye dependencia PostgreSQL JDBC 42.6.0
+   - Incluye configuración de compilación Java 11
+   - Ubicación: C:\Users\nicob\OneDrive\Documentos\repositorio\java101\
+
+2. 📝 py/com/nikosoft/utils/ConnectionManager.java (ACTUALIZADO)
+   - Implementación completa del gestor de conexiones
+   - Patrón Singleton thread-safe
+   - Conexión automática a PostgreSQL
+   - Métodos: getConnection(), closeConnection(), isConnectionActive(), getConnectionInfo()
+   - Credenciales: develop / develop123
+   - URL: jdbc:postgresql://localhost:5432/db_depositos
+
+3. 📝 py/com/nikosoft/utils/ConnectionManagerExample.java
+   - Ejemplo completo de uso del ConnectionManager
+   - Demuestra: crear tabla, insertar datos, consultar datos
+   - Ejecutable con: mvn exec:java -Dexec.mainClass="py.com.nikosoft.utils.ConnectionManagerExample"
+
+4. 📋 py/com/nikosoft/utils/database.properties
+   - Archivo de configuración externalizado (opcional)
+   - Almacena credenciales y URL de BD
+
+5. 📚 DOCUMENTACIÓN:
+   ├── py/com/nikosoft/utils/README_ConnectionManager.md
+   │   └─ Documentación técnica detallada del ConnectionManager
+   │
+   ├── MAVEN_SETUP.md
+   │   └─ Guía de uso de Maven y sus comandos
+   │
+   ├── MANUAL_MAVEN_INSTALL.md
+   │   └─ Instrucciones detalladas para instalar Maven
+   │
+   ├── INICIO_RAPIDO.md
+   │   └─ Guía rápida de 5 pasos (RECOMENDADO PARA EMPEZAR)
+   │
+   └── README.md (ACTUALIZADO)
+       └─ Documentación general del proyecto
+
+6. 🔧 SCRIPTS DE INSTALACIÓN:
+   ├── Install-Maven.ps1
+   │   └─ Script PowerShell para instalar Maven automáticamente
+   │
+   └── install-maven.bat
+       └─ Script Batch para instalar Maven automáticamente
+
+
+📋 BASE DE DATOS - SENTENCIAS NECESARIAS:
+═══════════════════════════════════════════
+
+CREATE DATABASE db_depositos;
+CREATE USER develop WITH PASSWORD 'develop123';
+GRANT ALL PRIVILEGES ON DATABASE db_depositos TO develop;
+GRANT USAGE ON SCHEMA public TO develop;
+
+
+🔑 CREDENCIALES CONFIGURADAS:
+════════════════════════════
+
+Host:         localhost
+Puerto:       5432
+Base Datos:   db_depositos
+Usuario:      develop
+Contraseña:   develop123
+
+
+📦 DEPENDENCIAS EN POM.XML:
+═════════════════════════
+
+- postgresql:postgresql:42.6.0        (Driver JDBC)
+- junit:junit:4.13.2                  (Testing)
+- org.slf4j:slf4j-api:2.0.7          (Logging)
+- org.slf4j:slf4j-simple:2.0.7       (Logging)
+
+
+🚀 COMANDOS BÁSICOS PARA EMPEZAR:
+═════════════════════════════════
+
+# 1. Compilar el proyecto
+mvn clean compile
+
+# 2. Ejecutar el ejemplo
+mvn exec:java -Dexec.mainClass="py.com.nikosoft.utils.ConnectionManagerExample"
+
+# 3. Crear JAR ejecutable
+mvn clean package assembly:single
+
+
+📖 PRÓXIMOS PASOS RECOMENDADOS:
+════════════════════════════════
+
+1. Leer: INICIO_RAPIDO.md (guía de 5 pasos)
+2. Instalar Maven (ver scripts en la carpeta raíz)
+3. Ejecutar sentencias SQL en PostgreSQL
+4. Compilar: mvn clean compile
+5. Ejecutar ejemplo: mvn exec:java -Dexec.mainClass="..."
+6. Usar ConnectionManager en tu código
+
+
+📊 ESTRUCTURA FINAL DEL PROYECTO:
+═════════════════════════════════
+
+java101/
+├── pom.xml                                    ✨ NUEVO
+├── INICIO_RAPIDO.md                          ✨ NUEVO
+├── MAVEN_SETUP.md                            ✨ NUEVO
+├── MANUAL_MAVEN_INSTALL.md                   ✨ NUEVO
+├── Install-Maven.ps1                         ✨ NUEVO
+├── install-maven.bat                         ✨ NUEVO
+├── README.md                                 ✨ ACTUALIZADO
+├── java101.iml
+│
+├── py/com/nikosoft/
+│   ├── utils/
+│   │   ├── ConnectionManager.java            ✨ ACTUALIZADO
+│   │   ├── ConnectionManagerExample.java     ✨ NUEVO
+│   │   ├── database.properties               ✨ NUEVO
+│   │   └── README_ConnectionManager.md       ✨ NUEVO
+│   │
+│   ├── controller/
+│   ├── boundary/
+│   └── entities/
+│
+├── parte1/                                    (Código original)
+├── parte2-10/                                 (Código original)
+│
+└── target/                                    (Generado por Maven después de compilar)
+    ├── classes/                              (Archivos compilados)
+    └── ...
+
+
+⚙️ CONFIGURACIÓN EN INTELLIJ IDEA:
+══════════════════════════════════
+
+Cuando abras IntelliJ IDEA:
+1. El IDE detectará automáticamente el pom.xml
+2. Verás notificación "Load Maven Changes"
+3. Haz clic para que descargue las dependencias
+4. Espera a que termine (primera vez tarda)
+5. ¡Listo para usar!
+
+
+❓ PREGUNTAS FRECUENTES:
+═══════════════════════
+
+P: ¿Dónde está Maven?
+R: Se instala con Chocolatey en: C:\ProgramData\chocolatey\lib\maven\tools\apache-maven-*
+
+P: ¿Qué versión de Java necesito?
+R: Java 11 o superior (configurado en pom.xml)
+
+P: ¿Puedo usar el proyecto sin Maven?
+R: Sí, pero necesitas agregar manualmente el driver JDBC de PostgreSQL a tu classpath
+
+P: ¿Dónde encuentro el driver de PostgreSQL?
+R: Maven lo descarga automáticamente en ~/.m2/repository/org/postgresql/
+
+P: ¿Cómo cambio las credenciales?
+R: Edita ConnectionManager.java líneas 19-20
+
+
+✅ VERIFICACIÓN FINAL:
+═════════════════════
+
+✓ Archivo pom.xml creado
+✓ ConnectionManager.java implementado
+✓ ConnectionManagerExample.java creado
+✓ Documentación completa
+✓ Scripts de instalación listos
+✓ README actualizado
+✓ INICIO_RAPIDO.md disponible
+
+
+🎯 ESTATUS: ¡LISTO PARA USAR!
+═════════════════════════════
+
+El proyecto está completamente configurado para:
+- Usar Maven para gestionar dependencias
+- Conectarse a PostgreSQL automáticamente
+- Ejecutar ejemplos y compilar código
+- Crear aplicaciones Java con BD
+
+Próximo paso: Leer INICIO_RAPIDO.md
+
+
+═══════════════════════════════════════════════════════════════════
+Creado: Julio 2026
+Versión: 1.0.0
+═══════════════════════════════════════════════════════════════════
+

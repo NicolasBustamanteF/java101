@@ -35,17 +35,17 @@ public class CategoriaCRUDExample {
             // 3. ADD - AGREGAR NUEVAS CATEGORÍAS
             System.out.println("3️⃣ AGREGAR (ADD) - Insertar nuevas categorías");
             System.out.println("─────────────────────────────────────────────────────────");
-            int id1 = dao.add("Electrónica");
-            int id2 = dao.add("Ropa y Accesorios");
-            int id3 = dao.add("Hogar y Decoración");
-            int id4 = dao.add("Libros y Material Educativo");
-            int id5 = dao.add("Deportes y Recreación");
+            int id1 = dao.add(new Categoria("Electrónica"));
+            int id2 = dao.add(new Categoria("Ropa y Accesorios"));
+            int id3 = dao.add(new Categoria("Hogar y Decoración"));
+            int id4 = dao.add(new Categoria("Libros y Material Educativo"));
+            int id5 = dao.add(new Categoria("Deportes y Recreación"));
             System.out.println();
 
             // 4. SELECT - OBTENER TODAS LAS CATEGORÍAS
             System.out.println("4️⃣ CONSULTAR (SELECT) - Obtener todas las categorías");
             System.out.println("─────────────────────────────────────────────────────────");
-            List<Categoria> todasLasCategorias = dao.select();
+            List<Categoria> todasLasCategorias = dao.getAll();
             System.out.println("Categorías encontradas:");
             for (Categoria cat : todasLasCategorias) {
                 System.out.println("  [" + cat.getIdCategoria() + "] " + cat.getDescripcion());
@@ -55,7 +55,7 @@ public class CategoriaCRUDExample {
             // 5. SELECT BY ID - OBTENER UNA CATEGORÍA ESPECÍFICA
             System.out.println("5️⃣ CONSULTAR POR ID (SELECT BY ID)");
             System.out.println("─────────────────────────────────────────────────────────");
-            Categoria categoria = dao.selectById(id1);
+            Categoria categoria = dao.getById(id1);
             if (categoria != null) {
                 System.out.println("Categoría encontrada: [" + categoria.getIdCategoria() + "] " +
                                  categoria.getDescripcion());
@@ -66,14 +66,14 @@ public class CategoriaCRUDExample {
             System.out.println("6️⃣ BÚSQUEDA POR DESCRIPCIÓN (SELECT BY DESCRIPCION - LIKE)");
             System.out.println("─────────────────────────────────────────────────────────");
             System.out.println("Búsqueda: 'Electró' (búsqueda parcial)");
-            List<Categoria> resultadosElectro = dao.selectByDescripcion("Electró");
+            List<Categoria> resultadosElectro = dao.getByDescripcion("Electró");
             for (Categoria cat : resultadosElectro) {
                 System.out.println("  [" + cat.getIdCategoria() + "] " + cat.getDescripcion());
             }
             System.out.println();
 
             System.out.println("Búsqueda: 'Material' (búsqueda parcial)");
-            List<Categoria> resultadosMaterial = dao.selectByDescripcion("Material");
+            List<Categoria> resultadosMaterial = dao.getByDescripcion("Material");
             for (Categoria cat : resultadosMaterial) {
                 System.out.println("  [" + cat.getIdCategoria() + "] " + cat.getDescripcion());
             }
@@ -83,14 +83,14 @@ public class CategoriaCRUDExample {
             System.out.println("7️⃣ ACTUALIZAR (UPDATE) - Modificar una categoría");
             System.out.println("─────────────────────────────────────────────────────────");
             System.out.println("Actualizando categoría " + id2 + " de: 'Ropa y Accesorios'");
-            boolean actualizado = dao.update(id2, "Vestuario y Accesorios Personales");
+            boolean actualizado = dao.update(new Categoria(id2, "Vestuario y Accesorios Personales"));
             System.out.println("Nueva descripción: 'Vestuario y Accesorios Personales'");
             System.out.println();
 
             // 8. VERIFICAR LA ACTUALIZACIÓN
             System.out.println("8️⃣ VERIFICAR ACTUALIZACIÓN");
             System.out.println("─────────────────────────────────────────────────────────");
-            Categoria categoriaActualizada = dao.selectById(id2);
+            Categoria categoriaActualizada = dao.getById(id2);
             if (categoriaActualizada != null) {
                 System.out.println("Categoría actualizada: [" + categoriaActualizada.getIdCategoria() + "] " +
                                  categoriaActualizada.getDescripcion());
@@ -108,7 +108,7 @@ public class CategoriaCRUDExample {
             System.out.println("🔟 VERIFICAR ELIMINACIÓN");
             System.out.println("─────────────────────────────────────────────────────────");
             System.out.println("Intentando obtener categoría eliminada (ID: " + id5 + ")");
-            Categoria categoriaEliminada = dao.selectById(id5);
+            Categoria categoriaEliminada = dao.getById(id5);
             System.out.println();
 
             // 11. ESTADO FINAL
@@ -121,7 +121,7 @@ public class CategoriaCRUDExample {
             // 12. LISTAR TODAS LAS CATEGORÍAS FINALES
             System.out.println("1️⃣2️⃣ LISTADO FINAL DE CATEGORÍAS");
             System.out.println("─────────────────────────────────────────────────────────");
-            List<Categoria> categoriasFinales = dao.select();
+            List<Categoria> categoriasFinales = dao.getAll();
             for (Categoria cat : categoriasFinales) {
                 System.out.println("  [" + cat.getIdCategoria() + "] " + cat.getDescripcion());
             }
@@ -131,7 +131,7 @@ public class CategoriaCRUDExample {
             System.out.println("1️⃣3️⃣ BÚSQUEDAS ADICIONALES (LIKE)");
             System.out.println("─────────────────────────────────────────────────────────");
             System.out.println("Búsqueda: 'y' (letra 'y')");
-            List<Categoria> resultadosY = dao.selectByDescripcion("y");
+            List<Categoria> resultadosY = dao.getByDescripcion("y");
             for (Categoria cat : resultadosY) {
                 System.out.println("  [" + cat.getIdCategoria() + "] " + cat.getDescripcion());
             }

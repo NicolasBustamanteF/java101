@@ -22,14 +22,11 @@
 
     <!-- Dependencias -->
     <dependencies>
-        <!-- PostgreSQL JDBC Driver (local) -->
-        <!-- Driver descargado manualmente en lib/postgresql-42.7.13.jar -->
+        <!-- PostgreSQL JDBC Driver -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.7.13</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/postgresql-42.7.13.jar</systemPath>
         </dependency>
 
         <!-- JUnit para testing (opcional) -->
@@ -43,6 +40,23 @@
 
     <!-- Configuración de Build -->
     <build>
+        <!-- Directorios de Fuentes -->
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <testSourceDirectory>src/test/java</testSourceDirectory>
+
+        <!-- Directorios de Recursos -->
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+        </testResources>
+
         <plugins>
             <!-- Maven Compiler Plugin -->
             <plugin>
@@ -80,13 +94,6 @@
                 </configuration>
             </plugin>
         </plugins>
-
-        <!-- Directorios de Recursos -->
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-            </resource>
-        </resources>
     </build>
 </project>
 

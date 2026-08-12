@@ -1,0 +1,256 @@
+⚡ INICIO RÁPIDO - CRUD CON CategoriaDAO
+═════════════════════════════════════════════════════════════════════════════════
+
+📚 ARCHIVOS CREADOS
+─────────────────────────────────────────────────────────────────────────────
+
+✨ CategoriaDAO.java
+   └─ Ubicación: py/com/nikosoft/depositos/boundary/CategoriaDAO.java
+   └─ Implementa todas las operaciones CRUD
+
+✨ CategoriaCRUDExample.java
+   └─ Ubicación: py/com/nikosoft/depositos/CategoriaCRUDExample.java
+   └─ Ejemplo completo de uso
+
+✨ OPERACIONES_CRUD.md
+   └─ Documentación detallada de todos los métodos
+
+═════════════════════════════════════════════════════════════════════════════════
+🚀 COMPILAR Y EJECUTAR EL EJEMPLO
+═════════════════════════════════════════════════════════════════════════════════
+
+1. Compila el proyecto:
+   cd C:\Users\nicob\OneDrive\Documentos\repositorio\java101
+   mvn clean compile
+
+2. Ejecuta el ejemplo CRUD:
+   mvn exec:java -Dexec.mainClass="py.com.nikosoft.depositos.CategoriaCRUDExample"
+
+3. Resultado esperado:
+   ✓ Se crearán 5 categorías
+   ✓ Se mostrarán todas las categorías
+   ✓ Se realizarán búsquedas por descripción
+   ✓ Se actualizará una categoría
+   ✓ Se eliminará una categoría
+   ✓ Se mostrará el estado final
+
+═════════════════════════════════════════════════════════════════════════════════
+📖 OPERACIONES DISPONIBLES
+═════════════════════════════════════════════════════════════════════════════════
+
+CategoriaDAO dao = new CategoriaDAO();
+
+1️⃣ CREAR TABLA
+   dao.createTable();
+
+2️⃣ AGREGAR (CREATE/INSERT)
+   int id = dao.add("Descripción de la categoría");
+
+   Ejemplo:
+   int id1 = dao.add("Electrónica");
+   int id2 = dao.add("Ropa");
+
+3️⃣ CONSULTAR TODOS (READ ALL)
+   List<Categoria> categorias = dao.select();
+
+   Ejemplo:
+   for (Categoria cat : categorias) {
+       System.out.println(cat.getIdCategoria() + " - " + cat.getDescripcion());
+   }
+
+4️⃣ CONSULTAR POR ID (READ BY ID)
+   Categoria categoria = dao.selectById(1);
+
+   Ejemplo:
+   if (categoria != null) {
+       System.out.println(categoria.getDescripcion());
+   }
+
+5️⃣ BUSCAR POR DESCRIPCIÓN (READ BY DESCRIPTION - LIKE)
+   List<Categoria> resultados = dao.selectByDescripcion("palabra");
+
+   Ejemplo:
+   // Búsqueda exacta
+   List<Categoria> list1 = dao.selectByDescripcion("Electrónica");
+
+   // Búsqueda parcial
+   List<Categoria> list2 = dao.selectByDescripcion("Electró");
+
+   // Búsqueda por letra
+   List<Categoria> list3 = dao.selectByDescripcion("a");
+
+6️⃣ ACTUALIZAR (UPDATE)
+   boolean actualizado = dao.update(1, "Nueva descripción");
+
+   Ejemplo:
+   dao.update(1, "Electrónica y Gadgets");
+   if (actualizado) {
+       System.out.println("Actualizado");
+   }
+
+7️⃣ ELIMINAR (DELETE)
+   boolean eliminado = dao.delete(1);
+
+   Ejemplo:
+   if (dao.delete(1)) {
+       System.out.println("Eliminado");
+   }
+
+8️⃣ CONTAR TOTAL
+   int total = dao.getTotalCategorias();
+   System.out.println("Total: " + total);
+
+9️⃣ ELIMINAR TODO (solo pruebas)
+   dao.deleteAll();
+
+═════════════════════════════════════════════════════════════════════════════════
+💻 EJEMPLO SIMPLE DE USO
+═════════════════════════════════════════════════════════════════════════════════
+
+import py.com.nikosoft.depositos.boundary.CategoriaDAO;
+import py.com.nikosoft.depositos.entities.Categoria;
+import java.sql.SQLException;
+import java.util.List;
+
+public class MiPrograma {
+    public static void main(String[] args) {
+        try {
+            CategoriaDAO dao = new CategoriaDAO();
+
+            // 1. Crear tabla
+            dao.createTable();
+
+            // 2. Agregar categorías
+            int id1 = dao.add("Electrónica");
+            int id2 = dao.add("Ropa");
+
+            // 3. Ver todas
+            List<Categoria> todas = dao.select();
+            for (Categoria cat : todas) {
+                System.out.println(cat.getId() + " - " + cat.getDescripcion());
+            }
+
+            // 4. Buscar por ID
+            Categoria cat = dao.selectById(id1);
+            System.out.println("Encontrada: " + cat.getDescripcion());
+
+            // 5. Buscar por descripción
+            List<Categoria> encontradas = dao.selectByDescripcion("Electró");
+            System.out.println("Encontradas: " + encontradas.size());
+
+            // 6. Actualizar
+            dao.update(id1, "Electrónica y Gadgets");
+
+            // 7. Eliminar
+            dao.delete(id2);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+═════════════════════════════════════════════════════════════════════════════════
+🔍 BÚSQUEDA POR DESCRIPCIÓN - EJEMPLOS
+═════════════════════════════════════════════════════════════════════════════════
+
+Si tienes estas categorías:
+├─ 1: Electrónica
+├─ 2: Ropa y Accesorios
+├─ 3: Hogar y Decoración
+├─ 4: Libros y Material Educativo
+└─ 5: Deportes y Recreación
+
+Búsquedas:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+dao.selectByDescripcion("Electrónica")
+   └─ Resultado: [1] Electrónica
+
+dao.selectByDescripcion("Electró")
+   └─ Resultado: [1] Electrónica
+
+dao.selectByDescripcion("Ropa")
+   └─ Resultado: [2] Ropa y Accesorios
+
+dao.selectByDescripcion("y")
+   └─ Resultados:
+      - [2] Ropa y Accesorios
+      - [3] Hogar y Decoración
+      - [4] Libros y Material Educativo
+      - [5] Deportes y Recreación
+
+dao.selectByDescripcion("Educativo")
+   └─ Resultado: [4] Libros y Material Educativo
+
+dao.selectByDescripcion("Mat")
+   └─ Resultado: [4] Libros y Material Educativo
+
+dao.selectByDescripcion("xyz")
+   └─ Resultado: (ninguno - sin resultados)
+
+═════════════════════════════════════════════════════════════════════════════════
+⚙️ CARACTERÍSTICAS TÉCNICAS
+═════════════════════════════════════════════════════════════════════════════════
+
+✅ Usa PreparedStatements (seguridad SQL)
+✅ Usa ConnectionManager (gestión de conexiones)
+✅ Manejo completo de excepciones
+✅ Cierra conexiones automáticamente
+✅ Mensajes informativos en cada operación
+✅ Búsqueda LIKE insensible a mayúsculas/minúsculas
+✅ Retorno de valores significativos
+✅ Documentación Javadoc completa
+
+═════════════════════════════════════════════════════════════════════════════════
+📋 REQUISITOS
+═════════════════════════════════════════════════════════════════════════════════
+
+✓ PostgreSQL ejecutándose en localhost:5432
+✓ Base de datos db_depositos creada
+✓ Usuario develop / Password develop123 configurado
+✓ Maven compilado (mvn clean compile)
+✓ Driver PostgreSQL en lib/postgresql-42.7.13.jar
+
+═════════════════════════════════════════════════════════════════════════════════
+✅ VERIFICACIÓN
+═════════════════════════════════════════════════════════════════════════════════
+
+1. Compila sin errores:
+   mvn clean compile
+   └─ Debe mostrar: BUILD SUCCESS
+
+2. Ejecuta el ejemplo:
+   mvn exec:java -Dexec.mainClass="py.com.nikosoft.depositos.CategoriaCRUDExample"
+   └─ Debe mostrar operaciones CRUD completadas
+
+3. Verifica la base de datos:
+   SELECT * FROM categoria;
+   └─ Debe mostrar las categorías insertadas
+
+═════════════════════════════════════════════════════════════════════════════════
+📚 DOCUMENTACIÓN COMPLETA
+═════════════════════════════════════════════════════════════════════════════════
+
+Para más detalles de cada método, ver:
+→ OPERACIONES_CRUD.md
+
+═════════════════════════════════════════════════════════════════════════════════
+✨ PRÓXIMOS PASOS
+═════════════════════════════════════════════════════════════════════════════════
+
+1. Ejecuta el ejemplo:
+   mvn exec:java -Dexec.mainClass="py.com.nikosoft.depositos.CategoriaCRUDExample"
+
+2. Adapta el código a tu necesidad específica
+
+3. Crea más DAOs para otras tablas (DepositoDAO, etc.)
+
+4. Integra con tu lógica de negocio
+
+═════════════════════════════════════════════════════════════════════════════════
+Versión: 1.0.0
+Fecha: Julio 2026
+Estado: ✅ Completo
+═════════════════════════════════════════════════════════════════════════════════
+
