@@ -1,4 +1,4 @@
-package py.com.nikosoft.depositos;
+package py.com.nikosoft.depositos.ui;
 
 import py.com.nikosoft.depositos.boundary.MarcaDAO;
 import py.com.nikosoft.depositos.boundary.ProductoDAO;
@@ -28,16 +28,16 @@ public class MarcaProductoCRUDExample {
             productoDAO.deleteAll();
 
             // Crear marcas
-            int m1 = marcaDAO.add("Acme");
-            int m2 = marcaDAO.add("Globex");
+            int m1 = marcaDAO.add(new Marca(0, "Acme"));
+            int m2 = marcaDAO.add(new Marca(0, "Globex"));
 
             // Crear productos
-            int p1 = productoDAO.add("Cámara", 299.99, m1);
-            int p2 = productoDAO.add("Camiseta", 19.90, null);
-            int p3 = productoDAO.add("Auriculares", 49.50, m2);
+            int p1 = productoDAO.add(new Producto(0, "Cámara", 299.99, m1));
+            int p2 = productoDAO.add(new Producto(0, "Camiseta", 19.90, null));
+            int p3 = productoDAO.add(new Producto(0, "Auriculares", 49.50, m2));
 
             // Listar productos
-            List<Producto> productos = productoDAO.select();
+            List<Producto> productos = productoDAO.getAll();
             System.out.println("Productos creados:");
             for (Producto p : productos) {
                 System.out.println("  [" + p.getIdProducto() + "] " + p.getNombre() + " - Precio: " + p.getPrecio() + " - ID Marca: " + (p.getIdMarca() == null ? "(sin asignar)" : p.getIdMarca()));
@@ -47,7 +47,7 @@ public class MarcaProductoCRUDExample {
             System.out.println("\nAsignando marca al producto Camiseta...");
             productoDAO.assignMarca(p2, m2);
 
-            Producto camis = productoDAO.selectById(p2);
+            Producto camis = productoDAO.getById(p2);
             System.out.println("Producto actualizado: [" + camis.getIdProducto() + "] " + camis.getNombre() + " - ID Marca: " + camis.getIdMarca());
 
             System.out.println("\n═════════════════════════════════════════════════════════");

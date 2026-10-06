@@ -1,4 +1,4 @@
-package py.com.nikosoft.depositos;
+package py.com.nikosoft.depositos.ui;
 
 import py.com.nikosoft.depositos.boundary.CategoriaDAO;
 import py.com.nikosoft.depositos.entities.Categoria;
@@ -114,7 +114,7 @@ public class CategoriaCRUDExample {
             // 11. ESTADO FINAL
             System.out.println("1️⃣1️⃣ ESTADO FINAL");
             System.out.println("─────────────────────────────────────────────────────────");
-            int total = dao.getTotalCategorias();
+            int total = dao.count();
             System.out.println("Categorías restantes: " + total);
             System.out.println();
 

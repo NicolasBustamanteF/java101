@@ -60,7 +60,7 @@ public class CategoriaDAO implements DbDaoManager<Categoria, Integer> {
      */
     @Override
     public int add(Categoria categoria) throws SQLException {
-        String insertSQL = "INSERT INTO categoria (categoria) VALUES (?)";
+        String insertSQL = "INSERT INTO categoria (descripcion) VALUES (?)";
 
         Connection connection = null;
         try {
@@ -304,7 +304,8 @@ public class CategoriaDAO implements DbDaoManager<Categoria, Integer> {
      * @return el número total de categorías
      * @throws SQLException si hay error en la operación
      */
-    public int getTotalCategorias() throws SQLException {
+    @Override
+    public int count() throws SQLException {
         String countSQL = "SELECT COUNT(*) as total FROM categoria";
 
         Connection connection = null;
@@ -336,6 +337,7 @@ public class CategoriaDAO implements DbDaoManager<Categoria, Integer> {
      * ELIMINAR TODOS LOS DATOS (solo para pruebas)
      * @throws SQLException si hay error en la operación
      */
+    @Override
     public void deleteAll() throws SQLException {
         String deleteSQL = "DELETE FROM categoria";
 

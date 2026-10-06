@@ -1,4 +1,4 @@
-package py.com.nikosoft.depositos.controller;
+package py.com.nikosoft.depositos.ui;
 
 import py.com.nikosoft.depositos.boundary.MarcaDAO;
 import py.com.nikosoft.depositos.boundary.ProductoDAO;
@@ -133,7 +133,7 @@ public class ProductoMenu {
         String want = scanner.nextLine().trim().toLowerCase();
         Integer idMarca = null;
         if (want.equals("s") || want.equals("si")) {
-            List<Marca> marcas = marcaDAO.select();
+            List<Marca> marcas = marcaDAO.getAll();
             if (marcas.isEmpty()) {
                 System.out.println("\n  ℹ No hay marcas disponibles. Cree una marca primero.");
                 pausa();
@@ -155,7 +155,7 @@ public class ProductoMenu {
             }
         }
 
-        int idProd = productoDAO.add(nombre, precio, idMarca);
+        int idProd = productoDAO.add(new Producto(0, nombre, precio, idMarca));
         if (idProd != -1) {
             System.out.println("\n✓ Producto agregado exitosamente (ID: " + idProd + ")");
         } else {
@@ -170,7 +170,7 @@ public class ProductoMenu {
         System.out.println("  TODOS LOS PRODUCTOS");
         System.out.println("─────────────────────────────────────────────────────────\n");
 
-        List<Producto> productos = productoDAO.select();
+        List<Producto> productos = productoDAO.getAll();
         if (productos.isEmpty()) {
             System.out.println("  ℹ No hay productos registrados.");
         } else {
@@ -198,7 +198,7 @@ public class ProductoMenu {
         System.out.print("\n  Ingrese el ID del producto: ");
         try {
             int id = Integer.parseInt(scanner.nextLine().trim());
-            Producto p = productoDAO.selectById(id);
+            Producto p = productoDAO.getById(id);
             if (p != null) {
                 System.out.println("\n  ✓ Producto encontrado:");
                 System.out.println("    ID: " + p.getIdProducto());
@@ -227,7 +227,7 @@ public class ProductoMenu {
             pausa();
             return;
         }
-        List<Producto> resultados = productoDAO.selectByNombre(termino);
+        List<Producto> resultados = productoDAO.getByNombre(termino);
         if (resultados.isEmpty()) {
             System.out.println("\n  ℹ No se encontraron productos con ese término.");
         } else {
@@ -255,7 +255,7 @@ public class ProductoMenu {
         System.out.print("\n  Ingrese el ID del producto a actualizar: ");
         try {
             int id = Integer.parseInt(scanner.nextLine().trim());
-            Producto actual = productoDAO.selectById(id);
+            Producto actual = productoDAO.getById(id);
             if (actual == null) {
                 System.out.println("\n  ✗ Producto no encontrado con ID: " + id);
                 pausa();
@@ -296,7 +296,7 @@ public class ProductoMenu {
                 }
             }
 
-            if (productoDAO.update(id, nuevoNombre, nuevoPrecio, idMarca)) {
+            if (productoDAO.update(new Producto(id, nuevoNombre, nuevoPrecio, idMarca))) {
                 System.out.println("\n  ✓ Producto actualizado exitosamente");
             } else {
                 System.out.println("\n  ✗ Error al actualizar el producto.");
@@ -317,7 +317,7 @@ public class ProductoMenu {
         System.out.print("\n  Ingrese el ID del producto a eliminar: ");
         try {
             int id = Integer.parseInt(scanner.nextLine().trim());
-            Producto p = productoDAO.selectById(id);
+            Producto p = productoDAO.getById(id);
             if (p == null) {
                 System.out.println("\n  ✗ Producto no encontrado con ID: " + id);
                 pausa();
@@ -352,7 +352,7 @@ public class ProductoMenu {
         System.out.print("\n  Ingrese el ID del producto: ");
         try {
             int idProd = Integer.parseInt(scanner.nextLine().trim());
-            Producto p = productoDAO.selectById(idProd);
+            Producto p = productoDAO.getById(idProd);
             if (p == null) {
                 System.out.println("\n  ✗ Producto no encontrado con ID: " + idProd);
                 pausa();
@@ -360,7 +360,7 @@ public class ProductoMenu {
             }
 
             System.out.println("\n  Producto: " + p.getNombre() + " (ID: " + p.getIdProducto() + ")");
-            List<Marca> marcas = marcaDAO.select();
+            List<Marca> marcas = marcaDAO.getAll();
             if (marcas.isEmpty()) {
                 System.out.println("\n  ℹ No hay marcas disponibles. Cree una marca primero.");
                 pausa();
@@ -391,7 +391,7 @@ public class ProductoMenu {
         System.out.println("  TOTAL DE PRODUCTOS");
         System.out.println("─────────────────────────────────────────────────────────");
 
-        int total = productoDAO.getTotalProductos();
+        int total = productoDAO.count();
         System.out.println("\n  Total de productos registrados: " + total);
         pausa();
     }

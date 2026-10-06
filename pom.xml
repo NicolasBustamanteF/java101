@@ -11,12 +11,12 @@
     <version>1.0.0</version>
     <name>Java101 - Sistema de Depósitos</name>
     <description>Proyecto educativo de Java con PostgreSQL</description>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <!-- Propiedades del Proyecto -->
     <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -27,6 +27,35 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.7.13</version>
+        </dependency>
+
+        <!-- Servlet y JSP (los provee el servidor: Tomcat 10.1+ / Jetty 12) -->
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>6.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.servlet.jsp</groupId>
+            <artifactId>jakarta.servlet.jsp-api</artifactId>
+            <version>3.1.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- JSTL (etiquetas c:forEach, c:if, etc. en los JSP).
+             "provided" porque WildFly y Jetty ya lo incluyen; para Tomcat habría que quitar el scope -->
+        <dependency>
+            <groupId>jakarta.servlet.jsp.jstl</groupId>
+            <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+            <version>3.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.web</groupId>
+            <artifactId>jakarta.servlet.jsp.jstl</artifactId>
+            <version>3.0.1</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- JUnit para testing (opcional) -->
@@ -40,6 +69,8 @@
 
     <!-- Configuración de Build -->
     <build>
+        <finalName>depositos</finalName>
+
         <!-- Directorios de Fuentes -->
         <sourceDirectory>src/main/java</sourceDirectory>
         <testSourceDirectory>src/test/java</testSourceDirectory>
@@ -64,8 +95,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version>
                 <configuration>
-                    <source>11</source>
-                    <target>11</target>
+                    <source>21</source>
+                    <target>21</target>
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
@@ -77,20 +108,22 @@
                 <version>3.0.0</version>
             </plugin>
 
-            <!-- Maven Assembly Plugin para crear JAR ejecutable -->
+            <!-- Maven WAR Plugin: empaqueta la aplicación web (src/main/webapp) -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.6.0</version>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.4.0</version>
+            </plugin>
+
+            <!-- Jetty: levanta la aplicación con "mvn jetty:run" en http://localhost:8080/depositos -->
+            <plugin>
+                <groupId>org.eclipse.jetty.ee10</groupId>
+                <artifactId>jetty-ee10-maven-plugin</artifactId>
+                <version>12.0.16</version>
                 <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <archive>
-                        <manifest>
-                            <mainClass>py.com.nikosoft.utils.ConnectionManagerExample</mainClass>
-                        </manifest>
-                    </archive>
+                    <webApp>
+                        <contextPath>/depositos</contextPath>
+                    </webApp>
                 </configuration>
             </plugin>
         </plugins>

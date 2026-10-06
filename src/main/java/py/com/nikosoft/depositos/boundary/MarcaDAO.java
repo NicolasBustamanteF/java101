@@ -2,19 +2,26 @@ package py.com.nikosoft.depositos.boundary;
 
 import py.com.nikosoft.depositos.entities.Marca;
 import py.com.nikosoft.utils.ConnectionManager;
+import py.com.nikosoft.utils.DbDaoManager;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MarcaDAO {
+/**
+ * MarcaDAO - Data Access Object para la tabla MARCA
+ * Implementa operaciones CRUD (Create, Read, Update, Delete)
+ * Utiliza ConnectionManager para gestionar conexiones
+ */
+public class MarcaDAO implements DbDaoManager<Marca, Integer> {
 
-    private ConnectionManager connectionManager;
+    private final ConnectionManager connectionManager;
 
     public MarcaDAO() {
         this.connectionManager = ConnectionManager.getInstance();
     }
 
+    @Override
     public void createTable() throws SQLException {
         String createTableSQL = "CREATE TABLE IF NOT EXISTS marca (" +
                 "id_marca SERIAL PRIMARY KEY, " +
@@ -38,7 +45,14 @@ public class MarcaDAO {
         }
     }
 
-    public int add(String nombre) throws SQLException {
+    /**
+     * AGREGAR (CREATE) - Inserta una nueva marca
+     * @param marca objeto marca
+     * @return el ID de la marca creada
+     * @throws SQLException si hay error en la operación
+     */
+    @Override
+    public int add(Marca marca) throws SQLException {
         String insertSQL = "INSERT INTO marca (nombre) VALUES (?)";
 
         Connection connection = null;
@@ -49,7 +63,7 @@ public class MarcaDAO {
                     Statement.RETURN_GENERATED_KEYS
             );
 
-            pstmt.setString(1, nombre);
+            pstmt.setString(1, marca.getNombre());
             int rowsAffected = pstmt.executeUpdate();
 
             if (rowsAffected > 0) {
@@ -74,7 +88,14 @@ public class MarcaDAO {
         }
     }
 
-    public boolean delete(int idMarca) throws SQLException {
+    /**
+     * ELIMINAR (DELETE) - Elimina una marca por ID
+     * @param idMarca el ID de la marca a eliminar
+     * @return true si se eliminó, false si no se encontró
+     * @throws SQLException si hay error en la operación
+     */
+    @Override
+    public boolean delete(Integer idMarca) throws SQLException {
         String deleteSQL = "DELETE FROM marca WHERE id_marca = ?";
 
         Connection connection = null;
@@ -105,7 +126,14 @@ public class MarcaDAO {
         }
     }
 
-    public boolean update(int idMarca, String nombre) throws SQLException {
+    /**
+     * ACTUALIZAR (UPDATE) - Actualiza el nombre de una marca
+     * @param marca la marca con los datos actualizados (debe incluir idMarca)
+     * @return true si se actualizó, false si no se encontró
+     * @throws SQLException si hay error en la operación
+     */
+    @Override
+    public boolean update(Marca marca) throws SQLException {
         String updateSQL = "UPDATE marca SET nombre = ? WHERE id_marca = ?";
 
         Connection connection = null;
@@ -113,8 +141,8 @@ public class MarcaDAO {
             connection = connectionManager.getConnection();
             PreparedStatement pstmt = connection.prepareStatement(updateSQL);
 
-            pstmt.setString(1, nombre);
-            pstmt.setInt(2, idMarca);
+            pstmt.setString(1, marca.getNombre());
+            pstmt.setInt(2, marca.getIdMarca());
             int rowsAffected = pstmt.executeUpdate();
 
             if (rowsAffected > 0) {
@@ -122,7 +150,7 @@ public class MarcaDAO {
                 pstmt.close();
                 return true;
             } else {
-                System.out.println("⚠ Marca no encontrada (ID: " + idMarca + ")");
+                System.out.println("⚠ Marca no encontrada (ID: " + marca.getIdMarca() + ")");
                 pstmt.close();
                 return false;
             }
@@ -137,38 +165,14 @@ public class MarcaDAO {
         }
     }
 
-    public List<Marca> select() throws SQLException {
-        List<Marca> marcas = new ArrayList<>();
-        String selectSQL = "SELECT id_marca, nombre FROM marca ORDER BY id_marca";
-
-        Connection connection = null;
-        try {
-            connection = connectionManager.getConnection();
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(selectSQL);
-
-            while (resultSet.next()) {
-                int id = resultSet.getInt("id_marca");
-                String nombre = resultSet.getString("nombre");
-                marcas.add(new Marca(id, nombre));
-            }
-
-            System.out.println("✓ Se consultaron " + marcas.size() + " marcas");
-            resultSet.close();
-            statement.close();
-            return marcas;
-
-        } catch (SQLException e) {
-            System.err.println("✗ Error al consultar marcas: " + e.getMessage());
-            throw e;
-        } finally {
-            if (connection != null) {
-                connectionManager.closeConnection(connection);
-            }
-        }
-    }
-
-    public Marca selectById(int idMarca) throws SQLException {
+    /**
+     * SELECCIONAR POR ID (READ BY ID) - Obtiene una marca por su ID
+     * @param idMarca el ID de la marca a buscar
+     * @return la marca encontrada o null si no existe
+     * @throws SQLException si hay error en la operación
+     */
+    @Override
+    public Marca getById(Integer idMarca) throws SQLException {
         String selectSQL = "SELECT id_marca, nombre FROM marca WHERE id_marca = ?";
 
         Connection connection = null;
@@ -199,7 +203,51 @@ public class MarcaDAO {
         }
     }
 
-    public List<Marca> selectByNombre(String nombreBusqueda) throws SQLException {
+    /**
+     * SELECCIONAR TODOS (READ ALL) - Obtiene todas las marcas
+     * @return lista de todas las marcas
+     * @throws SQLException si hay error en la operación
+     */
+    @Override
+    public List<Marca> getAll() throws SQLException {
+        List<Marca> marcas = new ArrayList<>();
+        String selectSQL = "SELECT id_marca, nombre FROM marca ORDER BY id_marca";
+
+        Connection connection = null;
+        try {
+            connection = connectionManager.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(selectSQL);
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id_marca");
+                String nombre = resultSet.getString("nombre");
+                marcas.add(new Marca(id, nombre));
+            }
+
+            System.out.println("✓ Se consultaron " + marcas.size() + " marcas");
+            resultSet.close();
+            statement.close();
+            return marcas;
+
+        } catch (SQLException e) {
+            System.err.println("✗ Error al consultar marcas: " + e.getMessage());
+            throw e;
+        } finally {
+            if (connection != null) {
+                connectionManager.closeConnection(connection);
+            }
+        }
+    }
+
+    /**
+     * SELECCIONAR POR NOMBRE (READ BY NAME - LIKE)
+     * Busca marcas cuyo nombre contenga el texto especificado
+     * @param nombreBusqueda el texto a buscar (puede ser parcial)
+     * @return lista de marcas que coinciden con la búsqueda
+     * @throws SQLException si hay error en la operación
+     */
+    public List<Marca> getByNombre(String nombreBusqueda) throws SQLException {
         List<Marca> marcas = new ArrayList<>();
         String selectSQL = "SELECT id_marca, nombre FROM marca WHERE nombre ILIKE ? ORDER BY id_marca";
 
@@ -228,7 +276,13 @@ public class MarcaDAO {
         }
     }
 
-    public int getTotalMarcas() throws SQLException {
+    /**
+     * OBTENER CANTIDAD DE MARCAS
+     * @return el número total de marcas
+     * @throws SQLException si hay error en la operación
+     */
+    @Override
+    public int count() throws SQLException {
         String countSQL = "SELECT COUNT(*) as total FROM marca";
 
         Connection connection = null;
@@ -255,6 +309,11 @@ public class MarcaDAO {
         }
     }
 
+    /**
+     * ELIMINAR TODOS LOS DATOS (solo para pruebas)
+     * @throws SQLException si hay error en la operación
+     */
+    @Override
     public void deleteAll() throws SQLException {
         String deleteSQL = "DELETE FROM marca";
 
@@ -275,4 +334,3 @@ public class MarcaDAO {
         }
     }
 }
-

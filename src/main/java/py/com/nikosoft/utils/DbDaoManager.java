@@ -11,4 +11,6 @@ public interface DbDaoManager<K ,ID> {
      boolean update(K k) throws SQLException;
      K getById(ID id) throws SQLException;
      List<K> getAll() throws SQLException;
+     int count() throws SQLException;
+     void deleteAll() throws SQLException;
  }
